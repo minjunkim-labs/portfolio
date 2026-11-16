@@ -7,6 +7,10 @@
     "directory": "./dist",
     "not_found_handling": "404-page"
   },
+  // Workers Logs, kept here so a deploy matches the dashboard (the config file is the source of truth).
+  "observability": {
+    "enabled": true
+  },
   // Required by `wrangler preview` (the PR preview command in Workers Builds). Empty: previews share the settings above.
   "previews": {}
 }
