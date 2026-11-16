@@ -1,19 +1,206 @@
 ---
-const title = "김민준";
+import Base from "../layouts/Base.astro";
+
+// Every fact below comes from the private career canon (canon/00_경력정본.md).
+// Keep each claim's condition (period, "계산상", status) when editing.
+type Credit = { who: "me" | "agent" | "peer"; text: string };
+type Work = {
+  id: string;
+  title: string;
+  context: string;
+  problem: string;
+  turn: string;
+  result: string;
+  note?: string;
+  credits: Credit[];
+  link?: { href: string; label: string };
+};
+
+const works: Work[] = [
+  {
+    id: "ios-26-4",
+    title: "iOS 26.4 업데이트 직후 멈춘 스플래시",
+    context: "MyD · iOS · 2026",
+    problem:
+      "iOS 26.4가 나오자 앱이 스플래시에서 멈췄습니다. OS 업데이트 뒤에는 실기기로 앱을 점검하는 습관이 있었고, 그 점검에서 발견했습니다.",
+    turn:
+      "원인은 네트워크 상태를 확인하는 타이밍이었습니다. iOS 26.4에서는 첫 NWPathMonitor callback이 스플래시의 SwiftUI .task보다 늦게 와서, 연결 확인 전에 초기화를 건너뛰고 다시 실행하지 않았습니다.",
+    result:
+      "첫 callback 뒤에 다시 실행되도록 .task(id:)로 바꾸고, 긴급 심사로 제출 8시간 만에 패치를 배포했습니다. 뒤따른 회귀(iOS 18의 검정 화면, 로컬 서버 포트 충돌)는 다음 두 버전에서 고쳤고, 네트워크 경우 6가지를 기준으로 확인했습니다.",
+    credits: [
+      { who: "me", text: "실기기 점검으로 발견, 수정 코드 작성" },
+    ],
+  },
+  {
+    id: "imageio",
+    title: "공지 이미지 한 장이 앱을 종료시킬 때",
+    context: "MyD · iOS · 2026",
+    problem:
+      "공지 팝업의 9432×17328px 이미지를 원본 크기로 디코딩하면 계산상 약 653MB가 되어, 앱이 강제 종료(SIGKILL)됐습니다.",
+    turn:
+      "이미지를 화면에 맞게 줄여서 디코딩하면 됩니다. ImageIO 썸네일 다운샘플러로 긴 변을 화면 너비×배율 픽셀로 제한하고, 원본 캐시를 껐습니다.",
+    result:
+      "393pt·3배율 기기에서 계산상 642×1179, 약 3MB로 디코딩합니다. 정상·nil·손상 데이터 등 테스트 6개를 붙이고, 로딩 상태 갱신을 메인 액터로 고정했습니다.",
+    note: "수정 뒤 메모리 사용량은 다시 재지 않았습니다. 위 숫자는 모두 계산값입니다.",
+    credits: [{ who: "me", text: "코드·테스트 작성" }],
+  },
+  {
+    id: "qr-session",
+    title: "30초마다 바뀌는 QR, 끊기는 검증",
+    context: "장병e음 모바일 신분증 · iOS · 2025",
+    problem: "QR이 30초마다 갱신될 때, 진행 중이던 검증이 끊겼습니다.",
+    turn:
+      "원인은 WebSocket 세션이 하나뿐인 구조였습니다.",
+    result:
+      "거래 ID별로 세션을 나누고(임시 ID를 실제 거래 ID로 교체), 단계별 timeout을 명시했습니다(QR 대기 45초, proof 30초, 검증 15초). 만료된 연결은 45초(QR 유효 30초 + 검증 15초)에 정리합니다.",
+    credits: [
+      { who: "me", text: "iOS로 구조 이식" },
+      { who: "peer", text: "원래 구조는 Android에서 다른 개발자가 만듦" },
+    ],
+  },
+  {
+    id: "ios-sdk",
+    title: "고객사 앱에 넣는 iOS SDK 배포 형태",
+    context: "B2B 데이터 수집 SDK · iOS · 2026",
+    problem:
+      "고객사 앱에 넣을 iOS SDK를 어떤 형태로 배포할지 정해야 했습니다.",
+    turn:
+      "Swift SDK 앞에 Objective-C facade를 두고, Swift Package와 XCFramework(기기·시뮬레이터)로 배포하면서 checksum과 privacy manifest를 함께 묶었습니다.",
+    result:
+      "sample host 3개가 같은 RC 결과물을 받아 동작하는지 검증했습니다. Android 1.0.0과 iOS RC까지 만들었고, 고객사 계약이 막판에 틀어져 전달 전에 중단됐습니다.",
+    credits: [
+      { who: "me", text: "설계와 결과 검증" },
+      { who: "agent", text: "구현은 AI 코딩 에이전트 위주" },
+    ],
+  },
+  {
+    id: "repo-office",
+    title: "이슈 하나를, 리뷰까지 끝난 PR로",
+    context: "repo-office · 개인 프로젝트 · 2026",
+    problem:
+      "AI 코딩 에이전트에게 일을 맡기면 설계 승인, 리뷰, 병합의 경계가 흐려지기 쉽습니다.",
+    turn:
+      "엔진이 단계(설계 → 사람 승인 → 구현 → 검사 → PR → 리뷰)마다 Claude Code 작업자를 띄웠다가 닫습니다. 승인은 설계 문서의 sha256에 묶어, 승인 뒤 설계가 바뀌면 다시 승인을 받습니다. 리뷰는 구현과 다른 세션이 하고, 병합은 사람이 합니다.",
+    result:
+      "실제 저장소 3곳에 연결해 2026년 11월 14~16일에 PR 23개를 열었고, 20개를 사람이 병합했습니다. 단위 테스트 84개가 통과합니다(1개 건너뜀, 2026-11-16).",
+    note: "PR 품질, 재작업 비율, 과제당 시간은 아직 재지 않았습니다.",
+    credits: [
+      { who: "me", text: "설계와 기준" },
+      { who: "agent", text: "구현은 AI 코딩 에이전트" },
+    ],
+    link: { href: "https://github.com/minjunkim-labs/repo-office", label: "저장소 보기" },
+  },
+];
+
+const whoLabel = { me: "제 몫", agent: "AI 에이전트 몫", peer: "동료 몫" } as const;
 ---
 
-<html lang="ko">
-  <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta name="robots" content="noindex" />
-    <title>{title}</title>
-  </head>
-  <body>
-    <main>
-      <h1>{title}</h1>
-      <p>새 포트폴리오를 준비하고 있습니다.</p>
-      <p><a href="https://minjunkim-dev.github.io/">지금은 기술 블로그에서 글을 볼 수 있습니다.</a></p>
-    </main>
-  </body>
-</html>
+<Base title="김민준 · iOS 엔지니어">
+  <header class="hero wrap">
+    <p class="eyebrow">김민준 · iOS 엔지니어</p>
+    <h1>iOS 앱을 개발부터 심사·출시·운영까지 맡아 온 모바일 엔지니어입니다.</h1>
+    <p class="lead">초록불도 그대로 믿지 않습니다. OS가 업데이트되면 실제 기기에서 앱을 한 번 더 확인합니다.</p>
+    <ul class="facts">
+      <li><strong>4년 4개월</strong><span>개인 데이터 플랫폼 MyD를 비롯한 앱 개발·운영 (2022.06–2026.10)</span></li>
+      <li><strong>87개 버전</strong><span>MyD iOS 앱 전체 출시 버전 수(2022.06 이후). 2025년 8월 이후 15개 버전은 모두 제가 출시</span></li>
+      <li><strong>99.8%</strong><span>MyD iOS crash-free 세션 (2026년 7~9월, Crashlytics)</span></li>
+    </ul>
+    <nav class="jump" aria-label="바로가기">
+      <a href="#work">작업 보기</a>
+      <a href="#contact">연락하기</a>
+    </nav>
+  </header>
+
+  <main>
+    <section id="work" class="wrap" aria-labelledby="work-title">
+      <h2 id="work-title">작업</h2>
+      <p class="section-note">사례마다 누가 무엇을 했는지 적었습니다. 제가 한 일과 AI 에이전트·동료가 한 일을 섞지 않습니다.</p>
+      {works.map((w) => (
+        <article class="work" id={w.id} aria-labelledby={`${w.id}-title`}>
+          <p class="context">{w.context}</p>
+          <h3 id={`${w.id}-title`}>{w.title}</h3>
+          <dl>
+            <dt>문제</dt>
+            <dd>{w.problem}</dd>
+            <dt>원인과 방향</dt>
+            <dd>{w.turn}</dd>
+            <dt>결과</dt>
+            <dd>{w.result}</dd>
+          </dl>
+          {w.note && <p class="note">{w.note}</p>}
+          <ul class="credits" aria-label="역할 나눔">
+            {w.credits.map((c) => (
+              <li class={`credit ${c.who}`}>
+                <span class="who">{whoLabel[c.who]}</span>
+                {c.text}
+              </li>
+            ))}
+          </ul>
+          {w.link && <p class="more"><a href={w.link.href}>{w.link.label} →</a></p>}
+        </article>
+      ))}
+    </section>
+
+    <section id="contact" class="wrap contact" aria-labelledby="contact-title">
+      <h2 id="contact-title">연락</h2>
+      <p>새 기회에 열려 있습니다. 서울·경기, 출근·하이브리드·원격 모두 가능합니다.</p>
+      <p>
+        <button type="button" id="email" data-user="minjunkim.dev" data-domain="gmail.com">이메일 주소 보기</button>
+      </p>
+      <ul class="links">
+        <li><a href="https://github.com/minjunkim-dev">GitHub</a></li>
+        <li><a href="https://www.linkedin.com/in/minjun-kim-bene-dev">LinkedIn</a></li>
+        <li><a href="https://minjunkim-dev.github.io/">기술 블로그</a></li>
+      </ul>
+    </section>
+  </main>
+
+  <footer class="wrap footer">
+    <p>Astro로 만들고 Cloudflare에 배포했습니다. 코드는 <a href="https://github.com/minjunkim-labs/portfolio">GitHub</a>에 있습니다.</p>
+  </footer>
+</Base>
+
+<script>
+  // Builds the address on click so the raw address is not in the HTML for scrapers.
+  const button = document.getElementById("email");
+  button?.addEventListener("click", () => {
+    const address = `${button.dataset.user}@${button.dataset.domain}`;
+    const link = document.createElement("a");
+    link.href = `mailto:${address}`;
+    link.textContent = address;
+    button.replaceWith(link);
+    link.focus();
+  });
+</script>
+
+<style>
+  .hero { padding-top: 18vh; padding-bottom: 12vh; }
+  .eyebrow { color: var(--muted); font-size: 0.95rem; margin: 0 0 1rem; letter-spacing: 0.02em; }
+  h1 { font-size: clamp(1.9rem, 5vw, 2.8rem); line-height: 1.3; margin: 0; letter-spacing: -0.02em; }
+  .lead { font-size: 1.15rem; color: var(--muted); margin: 1.25rem 0 2.5rem; }
+  .facts { list-style: none; padding: 0; margin: 0; display: grid; gap: 1rem; grid-template-columns: repeat(auto-fit, minmax(12rem, 1fr)); }
+  .facts li { border-top: 1px solid var(--line); padding-top: 0.75rem; display: grid; gap: 0.25rem; }
+  .facts strong { font-size: 1.5rem; letter-spacing: -0.01em; }
+  .facts span { color: var(--muted); font-size: 0.9rem; line-height: 1.5; }
+  .jump { display: flex; gap: 1.25rem; margin-top: 2.5rem; }
+  h2 { font-size: 1.5rem; margin: 0 0 0.5rem; }
+  .section-note { color: var(--muted); margin: 0 0 2rem; }
+  .work { background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); padding: 1.5rem; margin-bottom: 1.25rem; }
+  .context { color: var(--muted); font-size: 0.85rem; margin: 0; }
+  h3 { font-size: 1.25rem; margin: 0.25rem 0 1rem; line-height: 1.4; }
+  dl { margin: 0; }
+  dt { font-weight: 600; font-size: 0.9rem; margin-top: 0.75rem; }
+  dd { margin: 0.15rem 0 0; }
+  .note { color: var(--muted); font-size: 0.9rem; margin: 1rem 0 0; }
+  .credits { list-style: none; padding: 0; margin: 1.25rem 0 0; display: grid; gap: 0.4rem; font-size: 0.9rem; }
+  .credit { display: flex; gap: 0.6rem; align-items: baseline; }
+  .who { font-size: 0.75rem; font-weight: 600; padding: 0.1rem 0.5rem; border-radius: 999px; border: 1px solid currentColor; white-space: nowrap; }
+  .credit.me .who { color: var(--me); }
+  .credit.agent .who { color: var(--agent); }
+  .credit.peer .who { color: var(--peer); }
+  .more { margin: 1rem 0 0; }
+  .contact { padding-top: 4rem; padding-bottom: 2rem; }
+  #email { font: inherit; color: var(--bg); background: var(--text); border: 0; border-radius: var(--radius); padding: 0.6rem 1.1rem; cursor: pointer; }
+  .links { list-style: none; padding: 0; display: flex; flex-wrap: wrap; gap: 1.25rem; }
+  .footer { color: var(--muted); font-size: 0.85rem; padding-top: 2rem; padding-bottom: 3rem; border-top: 1px solid var(--line); margin-top: 3rem; }
+</style>
