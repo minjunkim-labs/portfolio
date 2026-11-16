@@ -12,3 +12,4 @@ dist/
 *.key
 *.p12
 .DS_Store
+.serena/

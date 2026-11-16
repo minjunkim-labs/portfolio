@@ -1,0 +1,69 @@
+---
+interface Props {
+  title: string;
+  description?: string;
+}
+const { title, description = "iOS 앱을 개발부터 심사·출시·운영까지 맡아 온 모바일 엔지니어 김민준" } = Astro.props;
+---
+
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <!-- shortcut: noindex until the custom domain is set; remove it at launch. -->
+    <meta name="robots" content="noindex" />
+    <meta name="description" content={description} />
+    <meta name="color-scheme" content="light dark" />
+    <title>{title}</title>
+    <style is:global>
+      :root {
+        --bg: #f7f5f0;
+        --surface: #ffffff;
+        --text: #1c1b19;
+        --muted: #5f5c55;
+        --line: #e2ded4;
+        --accent: #1f6f4a;
+        --me: #1f6f4a;
+        --agent: #6a4fb3;
+        --peer: #9a5b13;
+        --radius: 10px;
+        --max: 46rem;
+      }
+      @media (prefers-color-scheme: dark) {
+        :root {
+          --bg: #141412;
+          --surface: #1c1c19;
+          --text: #ecebe6;
+          --muted: #a7a49b;
+          --line: #2f2e2a;
+          --accent: #6cc79a;
+          --me: #6cc79a;
+          --agent: #b6a2ef;
+          --peer: #e0a75e;
+        }
+      }
+      * { box-sizing: border-box; }
+      html { -webkit-text-size-adjust: 100%; }
+      body {
+        margin: 0;
+        background: var(--bg);
+        color: var(--text);
+        font-family: -apple-system, BlinkMacSystemFont, "Apple SD Gothic Neo", "Pretendard", "Noto Sans KR", system-ui, sans-serif;
+        font-size: 17px;
+        line-height: 1.7;
+        word-break: keep-all;
+        overflow-wrap: anywhere;
+      }
+      a { color: var(--accent); text-underline-offset: 3px; }
+      a:focus-visible, button:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; border-radius: 4px; }
+      .wrap { max-width: var(--max); margin: 0 auto; padding: 0 16px; }
+      @media (prefers-reduced-motion: reduce) {
+        * { animation: none !important; transition: none !important; scroll-behavior: auto !important; }
+      }
+    </style>
+  </head>
+  <body>
+    <slot />
+  </body>
+</html>
