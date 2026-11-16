@@ -9,7 +9,11 @@
   },
   // Workers Logs, kept here so a deploy matches the dashboard (the config file is the source of truth).
   "observability": {
-    "enabled": true
+    "enabled": true,
+    // Records only when Worker code runs; static asset requests do not run the Worker.
+    "traces": {
+      "enabled": true
+    }
   },
   // Required by `wrangler preview` (the PR preview command in Workers Builds). Empty: previews share the settings above.
   "previews": {}
