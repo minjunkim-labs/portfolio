@@ -65,9 +65,9 @@ const works: Work[] = [
     problem:
       "고객사 앱에 넣을 iOS SDK를 어떤 형태로 배포할지 정해야 했습니다.",
     turn:
-      "Swift SDK 앞에 Objective-C facade를 두고, Swift Package와 XCFramework(기기·시뮬레이터)로 배포하면서 checksum과 privacy manifest를 함께 묶었습니다.",
+      "Swift SDK 앞에 Objective-C facade를 두고, Swift Package와 XCFramework(기기·시뮬레이터)로 배포하는 형태로 정했습니다. 결과물에는 checksum과 privacy manifest가 들어갑니다.",
     result:
-      "sample host 3개가 같은 RC 결과물을 받아 동작하는지 검증했습니다. Android 1.0.0과 iOS RC까지 만들었고, 고객사 계약이 막판에 틀어져 전달 전에 중단됐습니다.",
+      "sample host 3개가 같은 RC 결과물을 받아 동작하는지 검증했습니다. Android 1.0.0과 iOS RC 단계에서 공급 계약 무산으로 고객사 전달 전 중단됐습니다.",
     credits: [
       { who: "me", text: "설계와 결과 검증" },
       { who: "agent", text: "구현은 AI 코딩 에이전트 위주" },
@@ -99,7 +99,7 @@ const whoLabel = { me: "제 몫", agent: "AI 에이전트 몫", peer: "동료 �
   <header class="hero wrap">
     <p class="eyebrow">김민준 · iOS 엔지니어</p>
     <h1>iOS 앱을 개발부터 심사·출시·운영까지 맡아 온 모바일 엔지니어입니다.</h1>
-    <p class="lead">초록불도 그대로 믿지 않습니다. OS가 업데이트되면 실제 기기에서 앱을 한 번 더 확인합니다.</p>
+    <p class="lead">OS가 업데이트되면 실제 기기에서 앱을 다시 점검합니다. iOS 26.4 업데이트 직후의 스플래시 정지도 이 점검에서 발견했습니다.</p>
     <ul class="facts">
       <li><strong>4년 4개월</strong><span>개인 데이터 플랫폼 MyD를 비롯한 앱 개발·운영 (2022.06–2026.10)</span></li>
       <li><strong>87개 버전</strong><span>MyD iOS 앱 전체 출시 버전 수(2022.06 이후). 2025년 8월 이후 15개 버전은 모두 제가 출시</span></li>
