@@ -14,8 +14,8 @@ const habits = [
     body: "웹 프론트 배포는 공개 응답의 SHA-256이 빌드 결과물과 같을 때만 성공으로 판정하도록 재설계했습니다.",
   },
   {
-    title: "제가 한 일과 AI 코딩 에이전트·동료가 한 일을 나눠 적습니다.",
-    body: "Android SDK 테스트가 2,400세션 중 15건 간헐적으로 실패했습니다. 원인(제품 코드의 실행 순서 경합)은 AI 코딩 에이전트가 찾아 고쳤고, 저는 같은 2,400세션 반복에서 실패가 0건임을 확인했습니다.",
+    title: "제가 한 일과 에이전트·동료가 한 일을 나눠 적습니다.",
+    body: "Android SDK 테스트가 2,400세션 중 15건 간헐적으로 실패했습니다. 원인(제품 코드의 실행 순서 경합)은 에이전트가 찾아 고쳤고, 저는 같은 2,400세션 반복에서 실패가 0건임을 확인했습니다.",
   },
   {
     title: "결정과 근거는 문서로 남깁니다.",
@@ -101,8 +101,8 @@ const skills = [
     <h1>모바일 엔지니어 김민준입니다.</h1>
     <p class="lead">
       주로 iOS 앱을 개발하고 심사·출시·운영까지 맡았습니다. React Native 앱도 함께 만들었습니다(경력 4년 4개월).
-      B2B 데이터 수집 SDK와 인증 서버를 설계했고, 사내 CI/CD도 맡았습니다.
-      둘 다 구현은 AI 코딩 에이전트 위주로 했고, 결과는 제가 검증했습니다.
+      2026년 6~10월에는 사내 고객 문의 답변 서버를 운영에 연결하고, B2B 데이터 수집 SDK와 인증 서버를 설계하고, 사내 CI/CD를 맡았습니다.
+      이 세 가지는 구현을 AI 코딩 에이전트 위주로 했고, 저는 에이전트가 지킬 조건을 정하고 결과를 검증했습니다.
     </p>
     <p class="lead">
       경력은 모바일에서 쌓았지만 관심은 앱에만 있지 않습니다.
@@ -141,8 +141,7 @@ const skills = [
     </section>
 
     <section aria-labelledby="agent-title">
-      <h2 id="agent-title">AI 코딩 에이전트와 한 일</h2>
-      <p class="section-note">이 세 가지는 구현을 AI 코딩 에이전트 위주로 했습니다. 저는 에이전트가 지킬 조건을 정하고 결과를 검증했습니다.</p>
+      <h2 id="agent-title">사내 서버·SDK·인프라</h2>
       {agentWork.map((a) => (
         <article class="item">
           <p class="period">{a.period}</p>
@@ -191,7 +190,6 @@ const skills = [
   h2 { font-size: 1.4rem; margin: 0 0 1rem; }
   h3 { font-size: 1.1rem; margin: 0 0 0.25rem; line-height: 1.5; }
   p { margin: 0.25rem 0 0; }
-  .section-note { color: var(--muted); margin: 0 0 1rem; }
   .habits { margin: 0; padding-left: 1.4rem; display: grid; gap: 1.25rem; }
   .habits ::marker { font-family: var(--mono); color: var(--muted); }
   .company { display: grid; gap: 0.1rem; margin: 0 0 0.5rem; }
