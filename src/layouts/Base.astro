@@ -25,16 +25,14 @@ const here = Astro.url.pathname.replace(/\/?$/, "/");
     <meta name="color-scheme" content="light dark" />
     <title>{title}</title>
     <style is:global>
-      /* Ledger look: cool white page, ink rules, system monospace labels. Colour is kept for the who-did-what marks. */
+      /* Ledger look: cool white page, ink rules, system monospace labels. Colour is kept for one accent (the replay mark). */
       :root {
         --bg: #fbfcfc;
         --surface: #ffffff;
         --text: #12181c;
         --muted: #5a6770;
         --line: #d5dbdf;
-        --me: #0a7a4b;
-        --agent: #6247b8;
-        --peer: #9a5a10;
+        --accent: #0a7a4b;
         --radius: 4px;
         --max: 52rem;
         /* shortcut: system fonts only (CSP is default-src 'self'), self-host a webfont if the look must match across OSes. */
@@ -47,9 +45,7 @@ const here = Astro.url.pathname.replace(/\/?$/, "/");
           --text: #e9edef;
           --muted: #9aa6ae;
           --line: #2a3136;
-          --me: #5fcf9b;
-          --agent: #b6a2ef;
-          --peer: #e0a75e;
+          --accent: #5fcf9b;
         }
       }
       * { box-sizing: border-box; }
