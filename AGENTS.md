@@ -8,7 +8,7 @@
 
 - setup: `npm ci`
 - check: `npm run check`  (astro check: 타입·템플릿 검사)
-- test: N/A: 아직 테스트할 로직이 없다. 인터랙션을 넣는 PR이 테스트를 더한다
+- test: `npm run test`  (Playwright로 빌드한 사이트를 Chromium에서 연다. 처음 한 번 `npx playwright install chromium`)
 - build: `npm run build && npx wrangler deploy --dry-run`  (dry-run은 로그인 없이 배포 설정만 검사한다)
 
 ## 길잡이
@@ -17,6 +17,7 @@
 | --- | --- |
 | `src/pages/` | 페이지. 파일 하나가 URL 하나다 |
 | `public/` | 그대로 복사되는 정적 파일 |
+| `tests/` | Playwright 테스트. 설정은 `playwright.config.ts` |
 | `astro.config.mjs` | Astro 설정. 지금은 정적 출력만 쓴다 |
 | `wrangler.jsonc` | Cloudflare 배포 설정. `dist/`를 정적 자산으로 올린다 |
 | `REVIEW.md` | 리뷰 기준. 리뷰할 때만 읽는다 |

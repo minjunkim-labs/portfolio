@@ -33,6 +33,9 @@ jobs:
       - run: npm audit --include=dev --audit-level=moderate
       - name: check
         run: npm run check
-      # test: N/A in AGENTS.md (no logic to test yet)
+      - name: install chromium
+        run: npx playwright install --with-deps chromium
+      - name: test
+        run: npm run test
       - name: build
         run: npm run build && npx wrangler deploy --dry-run
