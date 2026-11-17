@@ -38,9 +38,6 @@ const posts = [
 
 <Base title="글 · 김민준" description="모바일 엔지니어 김민준이 쓴 기술 글 목록입니다.">
   <header class="wrap top">
-    <nav aria-label="사이트">
-      <a href="/">← 첫 화면</a>
-    </nav>
     <p class="eyebrow">글</p>
     <h1>작업하며 쓴 기술 글입니다.</h1>
     <p class="lead">글은 기존 기술 블로그에 있습니다. 제목을 누르면 블로그로 이동합니다.</p>
@@ -51,7 +48,7 @@ const posts = [
       {posts.map((p) => (
         <li>
           <time datetime={p.date}>{p.date}</time>
-          <h2><a href={`${blog}/${p.slug}/`}>{p.title} ↗</a></h2>
+          <h2><a href={`${blog}/${p.slug}/`}>{p.title} <span aria-hidden="true">↗</span></a></h2>
           <p>{p.description}</p>
         </li>
       ))}
@@ -61,7 +58,7 @@ const posts = [
 
 <style>
   .top { padding-top: 3rem; padding-bottom: 2rem; }
-  .eyebrow { color: var(--muted); font-size: 0.95rem; margin: 3rem 0 1rem; }
+  .eyebrow { color: var(--muted); font-size: 0.95rem; margin: 0 0 1rem; }
   h1 { font-size: clamp(1.7rem, 4.5vw, 2.4rem); line-height: 1.3; margin: 0; letter-spacing: -0.02em; }
   .lead { font-size: 1.1rem; color: var(--muted); margin: 1.25rem 0 0; }
   .posts { list-style: none; margin: 0; padding: 0 0 4rem; }

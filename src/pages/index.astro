@@ -107,7 +107,7 @@ const whoLabel = { me: "제 몫", agent: "AI 에이전트 몫", peer: "동료 �
     </ul>
     <nav class="jump" aria-label="바로가기">
       <a href="#work">작업 보기</a>
-      <a href="/about">소개</a>
+      <a href="/about/">소개</a>
       <a href="#contact">연락하기</a>
     </nav>
   </header>
@@ -137,7 +137,7 @@ const whoLabel = { me: "제 몫", agent: "AI 에이전트 몫", peer: "동료 �
               </li>
             ))}
           </ul>
-          {w.link && <p class="more"><a href={w.link.href}>{w.link.label} →</a></p>}
+          {w.link && <p class="more"><a href={w.link.href}>{w.link.label} <span aria-hidden="true">→</span></a></p>}
         </article>
       ))}
     </section>
@@ -151,14 +151,10 @@ const whoLabel = { me: "제 몫", agent: "AI 에이전트 몫", peer: "동료 �
       <ul class="links">
         <li><a href="https://github.com/minjunkim-dev">GitHub</a></li>
         <li><a href="https://www.linkedin.com/in/minjun-kim-bene-dev">LinkedIn</a></li>
-        <li><a href="/writing">글</a></li>
+        <li><a href="/writing/">글</a></li>
       </ul>
     </section>
   </main>
-
-  <footer class="wrap footer">
-    <p>Astro로 만들고 Cloudflare에 배포했습니다. 코드는 <a href="https://github.com/minjunkim-labs/portfolio">GitHub</a>에 있습니다.</p>
-  </footer>
 </Base>
 
 <script>
@@ -203,5 +199,4 @@ const whoLabel = { me: "제 몫", agent: "AI 에이전트 몫", peer: "동료 �
   .contact { padding-top: 4rem; padding-bottom: 2rem; }
   #email { font: inherit; color: var(--bg); background: var(--text); border: 0; border-radius: var(--radius); padding: 0.6rem 1.1rem; cursor: pointer; }
   .links { list-style: none; padding: 0; display: flex; flex-wrap: wrap; gap: 1.25rem; }
-  .footer { color: var(--muted); font-size: 0.85rem; padding-top: 2rem; padding-bottom: 3rem; border-top: 1px solid var(--line); margin-top: 3rem; }
 </style>

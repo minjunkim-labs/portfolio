@@ -4,6 +4,14 @@ interface Props {
   description?: string;
 }
 const { title, description = "iOS 앱을 개발부터 심사·출시·운영까지 맡아 온 모바일 엔지니어 김민준" } = Astro.props;
+
+const menu = [
+  { href: "/#work", label: "작업" },
+  { href: "/about/", label: "소개" },
+  { href: "/writing/", label: "글" },
+  { href: "/#contact", label: "연락" },
+];
+const here = Astro.url.pathname.replace(/\/?$/, "/");
 ---
 
 <!doctype html>
@@ -58,12 +66,25 @@ const { title, description = "iOS 앱을 개발부터 심사·출시·운영까�
       a { color: var(--accent); text-underline-offset: 3px; }
       a:focus-visible, button:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; border-radius: 4px; }
       .wrap { max-width: var(--max); margin: 0 auto; padding: 0 16px; }
+      .site-nav { display: flex; flex-wrap: wrap; gap: 0.25rem 1.25rem; align-items: baseline; padding-top: 1rem; padding-bottom: 1rem; border-bottom: 1px solid var(--line); font-size: 0.95rem; }
+      .site-nav .home { font-weight: 600; color: var(--text); text-decoration: none; margin-right: auto; }
+      .site-nav [aria-current="page"] { color: var(--text); }
+      .site-footer { color: var(--muted); font-size: 0.85rem; padding-top: 2rem; padding-bottom: 3rem; border-top: 1px solid var(--line); margin-top: 3rem; }
       @media (prefers-reduced-motion: reduce) {
         * { animation: none !important; transition: none !important; scroll-behavior: auto !important; }
       }
     </style>
   </head>
   <body>
+    <nav class="wrap site-nav" aria-label="사이트">
+      <a class="home" href="/" aria-current={here === "/" ? "page" : undefined}>김민준</a>
+      {menu.map((m) => (
+        <a href={m.href} aria-current={m.href === here ? "page" : undefined}>{m.label}</a>
+      ))}
+    </nav>
     <slot />
+    <footer class="wrap site-footer">
+      <p>Astro로 만들고 Cloudflare에 배포했습니다. 코드는 <a href="https://github.com/minjunkim-labs/portfolio">GitHub</a>에 있습니다.</p>
+    </footer>
   </body>
 </html>
