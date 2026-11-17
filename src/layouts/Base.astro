@@ -25,28 +25,29 @@ const here = Astro.url.pathname.replace(/\/?$/, "/");
     <meta name="color-scheme" content="light dark" />
     <title>{title}</title>
     <style is:global>
+      /* Ledger look: cool white page, ink rules, system monospace labels. Colour is kept for the who-did-what marks. */
       :root {
-        --bg: #f7f5f0;
+        --bg: #fbfcfc;
         --surface: #ffffff;
-        --text: #1c1b19;
-        --muted: #5f5c55;
-        --line: #e2ded4;
-        --accent: #1f6f4a;
-        --me: #1f6f4a;
-        --agent: #6a4fb3;
-        --peer: #9a5b13;
-        --radius: 10px;
-        --max: 46rem;
+        --text: #12181c;
+        --muted: #5a6770;
+        --line: #d5dbdf;
+        --me: #0a7a4b;
+        --agent: #6247b8;
+        --peer: #9a5a10;
+        --radius: 4px;
+        --max: 52rem;
+        /* shortcut: system fonts only (CSP is default-src 'self'), self-host a webfont if the look must match across OSes. */
+        --mono: ui-monospace, "SF Mono", SFMono-Regular, Menlo, Consolas, monospace;
       }
       @media (prefers-color-scheme: dark) {
         :root {
-          --bg: #141412;
-          --surface: #1c1c19;
-          --text: #ecebe6;
-          --muted: #a7a49b;
-          --line: #2f2e2a;
-          --accent: #6cc79a;
-          --me: #6cc79a;
+          --bg: #111517;
+          --surface: #171c1f;
+          --text: #e9edef;
+          --muted: #9aa6ae;
+          --line: #2a3136;
+          --me: #5fcf9b;
           --agent: #b6a2ef;
           --peer: #e0a75e;
         }
@@ -63,13 +64,20 @@ const here = Astro.url.pathname.replace(/\/?$/, "/");
         word-break: keep-all;
         overflow-wrap: anywhere;
       }
-      a { color: var(--accent); text-underline-offset: 3px; }
-      a:focus-visible, button:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; border-radius: 4px; }
+      a { color: inherit; text-decoration-thickness: 1px; text-underline-offset: 3px; }
+      a:hover { text-decoration-thickness: 2px; }
+      a:focus-visible, button:focus-visible { outline: 2px solid var(--text); outline-offset: 3px; border-radius: 2px; }
+      .label { font-family: var(--mono); font-size: 0.8rem; color: var(--muted); letter-spacing: 0.01em; }
+      /* Hangul falls back to the body font, so only the monospace space is too wide. */
+      .label, .site-nav, .site-footer, .mono { word-spacing: -0.2em; }
       .wrap { max-width: var(--max); margin: 0 auto; padding: 0 16px; }
-      .site-nav { display: flex; flex-wrap: wrap; gap: 0.25rem 1.25rem; align-items: baseline; padding-top: 1rem; padding-bottom: 1rem; border-bottom: 1px solid var(--line); font-size: 0.95rem; }
-      .site-nav .home { font-weight: 600; color: var(--text); text-decoration: none; margin-right: auto; }
-      .site-nav [aria-current="page"] { color: var(--text); }
-      .site-footer { color: var(--muted); font-size: 0.85rem; padding-top: 2rem; padding-bottom: 3rem; border-top: 1px solid var(--line); margin-top: 3rem; }
+      .site-nav { display: flex; flex-wrap: wrap; gap: 0.25rem 1.25rem; align-items: baseline; padding-top: 1.25rem; padding-bottom: 0.9rem; font-family: var(--mono); font-size: 0.85rem; }
+      .site-nav::after { content: ""; flex-basis: 100%; border-bottom: 2px solid var(--text); margin-top: 0.65rem; }
+      .site-nav a { color: var(--muted); text-decoration: none; }
+      .site-nav a:hover { color: var(--text); }
+      .site-nav .home { font-family: inherit; font-weight: 600; color: var(--text); margin-right: auto; }
+      .site-nav [aria-current="page"] { color: var(--text); text-decoration: underline; text-decoration-thickness: 2px; text-underline-offset: 5px; }
+      .site-footer { font-family: var(--mono); color: var(--muted); font-size: 0.78rem; padding-top: 1.5rem; padding-bottom: 3rem; border-top: 2px solid var(--text); margin-top: 4rem; }
       @media (prefers-reduced-motion: reduce) {
         * { animation: none !important; transition: none !important; scroll-behavior: auto !important; }
       }

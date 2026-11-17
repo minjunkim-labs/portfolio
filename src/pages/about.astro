@@ -97,7 +97,7 @@ const skills = [
   description="모바일 엔지니어 김민준의 일하는 방식, 경력, 개인 프로젝트, 사용 기술입니다."
 >
   <header class="wrap top">
-    <p class="eyebrow">소개</p>
+    <p class="label">소개</p>
     <h1>모바일 엔지니어 김민준입니다.</h1>
     <p class="lead">
       주로 iOS 앱을 개발하고 심사·출시·운영까지 맡았습니다. React Native 앱도 함께 만들었습니다(경력 4년 4개월).
@@ -184,22 +184,24 @@ const skills = [
 </Base>
 
 <style>
-  .top { padding-top: 3rem; padding-bottom: 2rem; }
-  .eyebrow { color: var(--muted); font-size: 0.95rem; margin: 0 0 1rem; }
-  h1 { font-size: clamp(1.7rem, 4.5vw, 2.4rem); line-height: 1.3; margin: 0; letter-spacing: -0.02em; }
-  .lead { font-size: 1.1rem; color: var(--muted); margin: 1.25rem 0 0; }
-  section { padding: 2rem 0; border-top: 1px solid var(--line); }
-  h2 { font-size: 1.5rem; margin: 0 0 1rem; }
+  .top { padding-top: 3rem; padding-bottom: 2.5rem; }
+  h1 { font-size: clamp(1.7rem, 4.5vw, 2.4rem); line-height: 1.3; margin: 0.9rem 0 0; letter-spacing: -0.02em; }
+  .lead { font-size: 1.05rem; color: var(--muted); margin: 1.1rem 0 0; max-width: 38em; }
+  section { padding: 1.5rem 0 2.25rem; border-top: 2px solid var(--text); }
+  h2 { font-size: 1.4rem; margin: 0 0 1rem; }
   h3 { font-size: 1.1rem; margin: 0 0 0.25rem; line-height: 1.5; }
   p { margin: 0.25rem 0 0; }
   .section-note { color: var(--muted); margin: 0 0 1rem; }
   .habits { margin: 0; padding-left: 1.4rem; display: grid; gap: 1.25rem; }
-  .company { display: grid; gap: 0.1rem; margin: 0 0 1rem; }
-  .company span, .period, .role { color: var(--muted); font-size: 0.9rem; }
-  .item { padding: 1rem 0; }
-  .item + .item { border-top: 1px dashed var(--line); }
-  .skills { margin: 0; display: grid; gap: 0.75rem; }
-  .skills dt { font-weight: 600; font-size: 0.9rem; }
+  .habits ::marker { font-family: var(--mono); color: var(--muted); }
+  .company { display: grid; gap: 0.1rem; margin: 0 0 0.5rem; }
+  .company span, .period, .role { color: var(--muted); font-size: 0.86rem; }
+  .company span, .period { font-family: var(--mono); font-size: 0.8rem; }
+  .item { padding: 1rem 0; border-top: 1px solid var(--line); }
+  .skills { margin: 0; display: grid; }
+  .skills div { display: grid; grid-template-columns: 9rem minmax(0, 1fr); gap: 1.5rem; padding: 0.6rem 0; border-top: 1px solid var(--line); }
+  .skills dt { font-family: var(--mono); font-size: 0.8rem; color: var(--muted); padding-top: 0.15rem; }
   .skills dd { margin: 0; }
-  .next { padding: 2rem 0 4rem; border-top: 1px solid var(--line); }
+  .next { padding: 1.5rem 0 0; border-top: 2px solid var(--text); font-family: var(--mono); font-size: 0.85rem; }
+  @media (max-width: 40rem) { .skills div { grid-template-columns: 1fr; gap: 0.1rem; } }
 </style>
