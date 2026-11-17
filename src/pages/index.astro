@@ -107,7 +107,7 @@ const whoLabel = { me: "제 몫", agent: "AI 에이전트 몫", peer: "동료 �
         <div class="screen" id="replay-screen">
           <span class="label">iOS 26.4</span>
           <p class="state"><span class="mark" aria-hidden="true"></span><span id="replay-state" aria-live="polite">스플래시에서 멈춤</span></p>
-          <button type="button" id="replay-toggle" aria-pressed="false">수정 후 보기</button>
+          <button type="button" id="replay-toggle">수정 후 보기</button>
         </div>
       </div>
       <figcaption class="label">아래 첫 사례를 다시 그린 예시 화면</figcaption>
@@ -186,7 +186,6 @@ const whoLabel = { me: "제 몫", agent: "AI 에이전트 몫", peer: "동료 �
     const fixed = document.getElementById("replay-screen")!.classList.toggle("fixed");
     document.getElementById("replay-state")!.textContent = fixed ? "첫 callback 뒤 초기화를 다시 실행" : "스플래시에서 멈춤";
     toggle.textContent = fixed ? "수정 전 보기" : "수정 후 보기";
-    toggle.setAttribute("aria-pressed", String(fixed));
   });
 </script>
 
@@ -204,7 +203,7 @@ const whoLabel = { me: "제 몫", agent: "AI 에이전트 몫", peer: "동료 �
   #replay-toggle { font: inherit; font-size: 0.72rem; font-weight: 600; color: var(--bg); background: var(--text); border: 0; border-radius: 0.5rem; padding: 0.45rem; cursor: pointer; }
   .facts { grid-column: 1 / -1; list-style: none; padding: 0; margin: 0; display: grid; grid-template-columns: repeat(auto-fit, minmax(12rem, 1fr)); border-top: 1px solid var(--line); }
   .facts li { border-bottom: 1px solid var(--line); padding: 0.8rem 1rem 0.8rem 0; display: grid; gap: 0.15rem; align-content: start; }
-  .facts strong { font-family: var(--mono); font-weight: 500; font-size: 1.35rem; font-variant-numeric: tabular-nums; }
+  .facts strong { font-family: var(--mono); font-weight: 500; font-size: 1.35rem; font-variant-numeric: tabular-nums; word-spacing: -0.2em; }
   .facts span { color: var(--muted); font-size: 0.86rem; line-height: 1.5; }
   h2 { font-size: 1.4rem; margin: 0 0 0.4rem; }
   .section-note { color: var(--muted); margin: 0 0 2rem; }
@@ -231,6 +230,7 @@ const whoLabel = { me: "제 몫", agent: "AI 에이전트 몫", peer: "동료 �
     .replay { order: 1; }
     .phone { width: 8rem; }
     .work { grid-template-columns: 1fr; gap: 0.5rem; }
-    .context { grid-auto-flow: column; justify-content: start; gap: 0.9rem; }
+    .context { grid-auto-flow: column; justify-content: start; gap: 0.5rem; }
+    .context li + li::before { content: "· "; }
   }
 </style>
