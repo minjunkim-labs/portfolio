@@ -13,3 +13,7 @@ dist/
 *.p12
 .DS_Store
 .serena/
+
+# Playwright
+test-results/
+playwright-report/
