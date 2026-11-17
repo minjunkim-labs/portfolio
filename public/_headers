@@ -1,8 +1,8 @@
 # Workers static assets apply these rules: https://developers.cloudflare.com/workers/static-assets/headers/
-# CSP is Report-Only first: index.astro has an inline script. Enforce it after the console shows the violations to fix.
+# CSP is Report-Only first: index.astro and PostHog.astro have inline scripts. Enforce it after the console shows the violations to fix.
 /*
   X-Content-Type-Options: nosniff
   Referrer-Policy: strict-origin-when-cross-origin
   Permissions-Policy: camera=(), microphone=(), geolocation=()
   X-Frame-Options: DENY
-  Content-Security-Policy-Report-Only: default-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'none'
+  Content-Security-Policy-Report-Only: default-src 'self'; script-src 'self' https://*.posthog.com; connect-src 'self' https://*.posthog.com; object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'none'
