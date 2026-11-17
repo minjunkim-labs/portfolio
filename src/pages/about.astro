@@ -1,0 +1,204 @@
+---
+import Base from "../layouts/Base.astro";
+
+// Every fact below comes from the private career canon (canon/00_경력정본.md).
+// Keep each claim's condition (period, "계산상", status) when editing.
+const habits = [
+  {
+    title: "OS가 업데이트되면 실제 기기에서 앱을 다시 점검합니다.",
+    body: "iOS 26.4가 나온 뒤 이 점검에서 앱이 스플래시에서 멈추는 것을 발견했습니다. 고친 버전을 긴급 심사로 제출해 8시간 만에 배포했습니다.",
+    link: { href: "/#ios-26-4", label: "사례 보기" },
+  },
+  {
+    title: "빌드 통과나 배포 완료 신호가 와도 실제 결과를 한 번 더 확인합니다.",
+    body: "웹 프론트 배포는 공개 응답의 SHA-256이 빌드 결과물과 같을 때만 성공으로 판정하도록 재설계했습니다.",
+  },
+  {
+    title: "제가 한 일과 AI 코딩 에이전트·동료가 한 일을 나눠 적습니다.",
+    body: "Android SDK 테스트가 2,400세션 중 15건 간헐적으로 실패했습니다. 원인(제품 코드의 실행 순서 경합)은 AI 코딩 에이전트가 찾아 고쳤고, 저는 같은 2,400세션 반복에서 실패가 0건임을 확인했습니다.",
+  },
+  {
+    title: "결정과 근거는 문서로 남깁니다.",
+    body: "개인 오픈소스 Runstir에는 alpha.4 기준 설계 결정 기록(ADR) 40건이 있습니다.",
+  },
+];
+
+const projects = [
+  {
+    period: "2022.06 – 2026.10",
+    title: "MyD · 개인 데이터 지갑",
+    role: "iOS 기능 개발 · 데이터·인증 연동 · 심사·배포 · 운영",
+    body: "2022년 6월 이후 87개 버전이 출시됐고, 심사 제출은 대부분 제가 했습니다. 2026년 7~9월 iOS 앱 전체의 crash-free 세션 비율은 99.8%였습니다(Crashlytics 기준).",
+    link: { href: "https://apps.apple.com/kr/app/id1576612543", label: "MyD App Store" },
+  },
+  {
+    period: "2025.09 – 2026.10",
+    title: "tbn교통방송 앱 고도화 사업 · React Native",
+    role: "iOS·Android 기능 개발 · 발주처 조율 · 심사·출시 · 출시 후 운영",
+    body: "공동 개발 중 주력 개발자로 방송·오디오, 편성, 교통 제보, 푸시, 본인인증, 로그인을 개발했습니다(일부는 먼저 만들어진 기능을 이어받음). 앱 서명과 스토어 심사를 직접 해 2026년 5월 28일 양 플랫폼에 정식 출시했습니다.",
+    link: { href: "https://apps.apple.com/kr/app/id969867489", label: "tbn교통방송 App Store" },
+  },
+  {
+    period: "2024.11 – 2025.11",
+    title: "장병e음 모바일 신분증",
+    role: "iOS 모듈 개발·통합 · Android 기능 단위 보완",
+    body: "회사 모바일 신분증 솔루션의 iOS 코드를 직접 만들고, 국방부 장병e음 앱에 통합했습니다. Android 핵심 신분증 흐름은 다른 개발자가 만들었고, 저는 기능 단위로 보완했습니다.",
+    link: { href: "https://apps.apple.com/kr/app/id6744992032", label: "장병e음 App Store" },
+  },
+];
+
+const agentWork = [
+  {
+    title: "MyD 고객 문의 자동 답변(RAG)",
+    period: "2026.06 – 2026.07",
+    body: "FAQ 근거로 답하는 사내 답변 서버를 맡아 운영에 연결했습니다. 근거 점수가 기준보다 낮으면 답하지 않고 운영자에게 넘깁니다. 2026년 10월까지 운영했습니다.",
+  },
+  {
+    title: "B2B 데이터 SDK와 인증 서버",
+    period: "2026.08 – 2026.09",
+    body: "고객사 앱에 넣는 공공기관 데이터 수집 SDK(iOS·Android)와 인증 서버를 설계했습니다. SDK는 고객사 전달 전 중단됐습니다.",
+  },
+  {
+    title: "배포 자동화와 사내 인프라",
+    period: "2026.07 – 2026.10",
+    body: "사내 CI·배포·모니터링 구성을 맡았습니다. CI 서버 디스크 100% 장애를 정리하고, 다시 차지 않게 정리 작업을 자동으로 돌렸습니다.",
+  },
+];
+
+const side = [
+  {
+    title: "repo-office",
+    href: "https://github.com/minjunkim-labs/repo-office",
+    body: "이슈 하나를 설계 승인, 구현, 검사, 리뷰까지 끝난 PR로 만드는 AI 코딩 에이전트 작업 파이프라인입니다(실험).",
+  },
+  {
+    title: "Runstir",
+    href: "https://github.com/minjunkim-dev/mobile-runtime",
+    body: "앱 개발자가 환경 설정과 실행 준비에 쓰는 반복 작업을 줄이는 오픈소스 도구입니다(Swift 6.2, alpha).",
+  },
+  {
+    title: "smallnext",
+    href: "https://github.com/minjunkim-dev/smallnext",
+    body: "LLM 호출을 생성기와 검사기로 나누고, 비용을 예약·정산 원장으로 통제하는 플래너입니다(SwiftUI + Rust API, 미출시).",
+  },
+];
+
+const skills = [
+  ["iOS", "Swift · SwiftUI · UIKit · Swift Concurrency · SwiftPM · XCFramework"],
+  ["크로스플랫폼", "React Native · TypeScript · Kotlin/Android · Flutter 연동"],
+  ["서버", "Node.js · Rust(axum) · PostgreSQL · Firebase Functions"],
+  ["테스트·배포", "XCTest · Jest · GitLab CI · Fastlane · Jenkins"],
+  ["인증·보안", "KMC · Kakao·Apple 로그인 · DID·VC · App Attest · JWS"],
+];
+---
+
+<Base
+  title="소개 · 김민준"
+  description="모바일 엔지니어 김민준의 일하는 방식, 경력, 개인 프로젝트, 사용 기술입니다."
+>
+  <header class="wrap top">
+    <nav aria-label="사이트">
+      <a href="/">← 첫 화면</a>
+    </nav>
+    <p class="eyebrow">소개</p>
+    <h1>모바일 엔지니어 김민준입니다.</h1>
+    <p class="lead">
+      주로 iOS 앱을 개발하고 심사·출시·운영까지 맡았습니다. React Native 앱도 함께 만들었습니다(경력 4년 4개월).
+      B2B 데이터 수집 SDK와 인증 서버를 설계했고, 사내 CI/CD도 맡았습니다.
+      둘 다 구현은 AI 코딩 에이전트 위주로 했고, 결과는 제가 검증했습니다.
+    </p>
+  </header>
+
+  <main class="wrap">
+    <section aria-labelledby="habits-title">
+      <h2 id="habits-title">일하는 방식</h2>
+      <ol class="habits">
+        {habits.map((h) => (
+          <li>
+            <h3>{h.title}</h3>
+            <p>{h.body} {h.link && <a href={h.link.href}>{h.link.label} →</a>}</p>
+          </li>
+        ))}
+      </ol>
+    </section>
+
+    <section aria-labelledby="career-title">
+      <h2 id="career-title">경력</h2>
+      <p class="company">
+        <strong>Personal AI(구 SNPLAB)</strong>
+        <span>개발팀(구 앱팀) · 선임연구원 · 정규직 · 2022.06 – 2026.10</span>
+      </p>
+      {projects.map((p) => (
+        <article class="item">
+          <p class="period">{p.period}</p>
+          <h3>{p.title}</h3>
+          <p class="role">{p.role}</p>
+          <p>{p.body}</p>
+          <p><a href={p.link.href}>{p.link.label} ↗</a></p>
+        </article>
+      ))}
+    </section>
+
+    <section aria-labelledby="agent-title">
+      <h2 id="agent-title">AI 코딩 에이전트와 한 일</h2>
+      <p class="section-note">이 세 가지는 구현을 AI 코딩 에이전트 위주로 했습니다. 저는 에이전트가 지킬 조건을 정하고 결과를 검증했습니다.</p>
+      {agentWork.map((a) => (
+        <article class="item">
+          <p class="period">{a.period}</p>
+          <h3>{a.title}</h3>
+          <p>{a.body}</p>
+        </article>
+      ))}
+    </section>
+
+    <section aria-labelledby="side-title">
+      <h2 id="side-title">개인 프로젝트</h2>
+      {side.map((s) => (
+        <article class="item">
+          <h3><a href={s.href}>{s.title}</a></h3>
+          <p>{s.body}</p>
+        </article>
+      ))}
+    </section>
+
+    <section aria-labelledby="skills-title">
+      <h2 id="skills-title">사용 기술</h2>
+      <dl class="skills">
+        {skills.map(([k, v]) => (
+          <div>
+            <dt>{k}</dt>
+            <dd>{v}</dd>
+          </div>
+        ))}
+      </dl>
+    </section>
+
+    <section aria-labelledby="edu-title">
+      <h2 id="edu-title">학력</h2>
+      <p><strong>세종대학교 데이터사이언스학과 · 학사</strong><br />2018.03 – 2022.02 · 소프트웨어융합대학 수석 졸업 · 학점 4.42 / 4.5</p>
+    </section>
+
+    <p class="next"><a href="/#work">작업 보기</a> · <a href="/#contact">연락하기</a></p>
+  </main>
+</Base>
+
+<style>
+  .top { padding-top: 3rem; padding-bottom: 2rem; }
+  .eyebrow { color: var(--muted); font-size: 0.95rem; margin: 3rem 0 1rem; }
+  h1 { font-size: clamp(1.7rem, 4.5vw, 2.4rem); line-height: 1.3; margin: 0; letter-spacing: -0.02em; }
+  .lead { font-size: 1.1rem; color: var(--muted); margin: 1.25rem 0 0; }
+  section { padding: 2rem 0; border-top: 1px solid var(--line); }
+  h2 { font-size: 1.5rem; margin: 0 0 1rem; }
+  h3 { font-size: 1.1rem; margin: 0 0 0.25rem; line-height: 1.5; }
+  p { margin: 0.25rem 0 0; }
+  .section-note { color: var(--muted); margin: 0 0 1rem; }
+  .habits { margin: 0; padding-left: 1.4rem; display: grid; gap: 1.25rem; }
+  .company { display: grid; gap: 0.1rem; margin: 0 0 1rem; }
+  .company span, .period, .role { color: var(--muted); font-size: 0.9rem; }
+  .item { padding: 1rem 0; }
+  .item + .item { border-top: 1px dashed var(--line); }
+  .skills { margin: 0; display: grid; gap: 0.75rem; }
+  .skills dt { font-weight: 600; font-size: 0.9rem; }
+  .skills dd { margin: 0; }
+  .next { padding: 2rem 0 4rem; border-top: 1px solid var(--line); }
+</style>
