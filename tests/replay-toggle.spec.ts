@@ -9,6 +9,7 @@ test("iPhone 버튼이 수정 전후를 바꾸고, 키보드로도 되돌린다"
 
   await expect(screen).not.toHaveClass(/\bfixed\b/);
   await expect(state).toHaveText("스플래시에서 멈춤");
+  await expect(state).toHaveAttribute("aria-live", "polite");
   await expect(toggle).toHaveAccessibleName("수정 후 보기");
 
   await toggle.click();
