@@ -40,7 +40,11 @@
 
 ### ops
 
-- 에러 추적은 Sentry, 제품 분석은 PostHog다. 다른 도구를 더하려면 먼저 소유자에게 묻는다.
+- repo-baseline ops 프로필의 도구를 모두 쓴다. 빼는 도구는 이 절에 `뺀 도구: 도구 — 이유` 한 줄로 적는다. 다른 도구를 더하려면 먼저 소유자에게 묻는다.
+- 코드·의존성 보안(GitHub secret scanning, push protection, Dependabot, CodeQL)과 GitGuardian은 조직에서 켜져 있다. 저장소에서 끄지 않는다.
+- 에러 추적은 Sentry, 제품 분석은 PostHog다. SDK는 처음 배포하는 PR에서 붙인다. 이미 배포한 앱이면 이 절을 붙인 뒤 따로 여는 PR에서 붙인다.
+- 배포한 URL은 UptimeRobot에, 도메인은 Cloudflare에 소유자가 등록한다.
+- 서버를 직접 운영하게 되면 Grafana Cloud, 비밀값이 세 곳을 넘으면 Infisical을 켠다. 켜기 전에 소유자에게 알린다.
 - 비밀값 이름은 `SENTRY_DSN`, `SENTRY_AUTH_TOKEN`, `POSTHOG_KEY`, `POSTHOG_HOST`다. `.env.example`에 빈 칸으로 둔다.
 - `SENTRY_AUTH_TOKEN`은 GitHub secrets에만 둔다.
 - 개인 정보는 분석 이벤트에 넣지 않는다. 세션 녹화를 켜면 입력 필드와 개인 정보를 보여 주는 화면 요소를 가린다.
