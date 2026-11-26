@@ -1,0 +1,22 @@
+{
+  "build": [
+    "sh",
+    "-c",
+    "npm run build && npx wrangler deploy --dry-run"
+  ],
+  "check": [
+    "npm",
+    "run",
+    "check"
+  ],
+  "setup": [
+    "sh",
+    "-c",
+    "npm ci --ignore-scripts && npx playwright install --with-deps chromium"
+  ],
+  "test": [
+    "sh",
+    "-c",
+    "node --test scripts/audit.test.mjs && npm run test"
+  ]
+}
