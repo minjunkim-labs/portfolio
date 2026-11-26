@@ -3,6 +3,6 @@
   "repository_id": 1459878262,
   "expected": {
     "protection": {"required_status_checks": {"checks": [{"context": "ci", "app_id": 15368}]}},
-    "allowed_actions": {"patterns_allowed": []}
+    "allowed_actions": {"patterns_allowed": ["jdx/mise-action@*"]}
   }
 }
