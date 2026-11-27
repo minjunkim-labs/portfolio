@@ -33,3 +33,28 @@ test("PC 너비에서도 제목이 글자 하나씩 세로로 꺾이지 않는�
   expect(h1!.height).toBeLessThan(250);
   expect(phone!.x).toBeGreaterThan(h1!.x + h1!.width - 1);
 });
+
+test("공유 카드·canonical·파비콘이 한 번의 슬래시로 나온다", async ({ page, request }) => {
+  await page.goto("/");
+  const og = await page.locator('meta[property="og:image"]').getAttribute("content");
+  expect(og).toBe("https://portfolio.minjunkim-dev.workers.dev/og.png");
+  expect(await page.locator('link[rel="canonical"]').getAttribute("href")).toBe("https://portfolio.minjunkim-dev.workers.dev/");
+  expect((await request.get("/og.png")).status()).toBe(200);
+  expect((await request.get("/favicon.svg")).status()).toBe(200);
+  await expect(page.locator('link[rel="icon"]')).toHaveAttribute("href", "/favicon.svg");
+});
+
+test("404는 noindex이고 canonical·공유 카드가 없다", async ({ page }) => {
+  await page.goto("/404.html");
+  await expect(page.locator('meta[name="robots"]')).toHaveAttribute("content", "noindex");
+  await expect(page.locator('link[rel="canonical"]')).toHaveCount(0);
+  await expect(page.locator('meta[property="og:url"]')).toHaveCount(0);
+});
+
+test("메뉴 링크의 누르는 영역이 44px 이상이다", async ({ page }) => {
+  await page.goto("/");
+  for (const link of await page.locator(".site-nav a").all()) {
+    const box = await link.boundingBox();
+    expect(box!.height + 0.5).toBeGreaterThanOrEqual(44);
+  }
+});

@@ -29,17 +29,21 @@ const here = Astro.url.pathname.replace(/\/?$/, "/");
     <title>{title}</title>
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
     {noindex ? <meta name="robots" content="noindex" /> : <link rel="canonical" href={canonical} />}
-    <meta property="og:type" content="website" />
-    <meta property="og:locale" content="ko_KR" />
-    <meta property="og:title" content={title} />
-    <meta property="og:description" content={description} />
-    <meta property="og:url" content={canonical} />
-    <meta property="og:image" content={`${site}/og.png`} />
-    <meta property="og:image:width" content="1200" />
-    <meta property="og:image:height" content="630" />
-    <meta name="twitter:card" content="summary_large_image" />
+    {!noindex && (
+      <>
+        <meta property="og:type" content="website" />
+        <meta property="og:locale" content="ko_KR" />
+        <meta property="og:title" content={title} />
+        <meta property="og:description" content={description} />
+        <meta property="og:url" content={canonical} />
+        <meta property="og:image" content={new URL("/og.png", site).href} />
+        <meta property="og:image:width" content="1200" />
+        <meta property="og:image:height" content="630" />
+        <meta name="twitter:card" content="summary_large_image" />
+      </>
+    )}
     <style is:global>
-      /* Ledger look: cool white page, ink rules, system monospace labels. Colour is kept for one accent (the replay mark). */
+      /* Ledger look: cool white page, ink rules, system monospace labels. Colour is kept for one accent (the demo gauge and slider). */
       :root {
         --bg: #fbfcfc;
         --surface: #ffffff;
