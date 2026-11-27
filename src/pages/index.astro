@@ -95,11 +95,11 @@ const works: Work[] = [
           </div>
           <label class="slide">
             <span class="mono">이미지 크기</span>
-            <input type="range" id="decode-size" min="0" max="100" step="1" value="100" aria-label="디코딩할 이미지 크기" />
+            <input type="range" id="decode-size" min="0" max="100" step="1" value="100" />
           </label>
         </div>
       </div>
-      <figcaption class="label">공지 이미지를 화면에 펼칠 때 필요한 메모리의 계산값입니다. 슬라이더를 왼쪽으로 끌어 보세요. 실제 사용량은 다시 재지 않았습니다.</figcaption>
+      <figcaption class="label">아래 두 번째 사례(공지 이미지)에서 화면에 펼칠 때 필요한 메모리의 계산값입니다. 슬라이더를 왼쪽으로 끌어 보세요. 실제 사용량은 다시 재지 않았습니다.</figcaption>
     </figure>
     <ul class="facts">
       <li><strong>4년 4개월</strong><span>개인 데이터 플랫폼 MyD를 비롯한 앱 개발·운영 (2022.06–2026.10)</span></li>
@@ -201,7 +201,7 @@ const works: Work[] = [
   .gauge span { display: block; height: 100%; background: var(--accent); width: 100%; }
   .verdict { min-height: 2.9em; }
   .slide { display: grid; gap: 0.25rem; font-size: 0.7rem; color: var(--muted); }
-  .slide input { width: 100%; accent-color: var(--accent); margin: 0; min-height: 2rem; }
+  .slide input { width: 100%; accent-color: var(--accent); margin: 0; min-height: 2.75rem; }
   .facts { grid-column: 1 / -1; list-style: none; padding: 0; margin: 0; display: grid; grid-template-columns: repeat(auto-fit, minmax(12rem, 1fr)); border-top: 1px solid var(--line); }
   .facts li { border-bottom: 1px solid var(--line); padding: 0.8rem 1rem 0.8rem 0; display: grid; gap: 0.15rem; align-content: start; }
   .facts strong { font-family: var(--mono); font-weight: 500; font-size: 1.35rem; font-variant-numeric: tabular-nums; word-spacing: -0.2em; }

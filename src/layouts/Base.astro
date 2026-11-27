@@ -4,8 +4,9 @@ import PostHog from "../components/PostHog.astro";
 interface Props {
   title: string;
   description?: string;
+  noindex?: boolean;
 }
-const { title, description = "iOS 앱을 개발부터 심사·출시·운영까지 맡아 온 모바일 엔지니어 김민준" } = Astro.props;
+const { noindex = false, title, description = "iOS 앱을 개발부터 심사·출시·운영까지 맡아 온 모바일 엔지니어 김민준" } = Astro.props;
 
 const menu = [
   { href: "/#work", label: "작업" },
@@ -13,7 +14,7 @@ const menu = [
   { href: "/writing/", label: "글" },
   { href: "/#contact", label: "연락" },
 ];
-const site = "https://portfolio.minjunkim-dev.workers.dev";
+const site = Astro.site?.href ?? "https://portfolio.minjunkim-dev.workers.dev/";
 const canonical = new URL(Astro.url.pathname, site).href;
 const here = Astro.url.pathname.replace(/\/?$/, "/");
 ---
@@ -27,7 +28,7 @@ const here = Astro.url.pathname.replace(/\/?$/, "/");
     <meta name="color-scheme" content="light dark" />
     <title>{title}</title>
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
-    <link rel="canonical" href={canonical} />
+    {noindex ? <meta name="robots" content="noindex" /> : <link rel="canonical" href={canonical} />}
     <meta property="og:type" content="website" />
     <meta property="og:locale" content="ko_KR" />
     <meta property="og:title" content={title} />
@@ -86,7 +87,7 @@ const here = Astro.url.pathname.replace(/\/?$/, "/");
       .site-nav a:hover { color: var(--text); }
       .site-nav .home { font-family: inherit; font-weight: 600; color: var(--text); margin-right: auto; }
       .site-nav [aria-current="page"] { color: var(--text); text-decoration: underline; text-decoration-thickness: 2px; text-underline-offset: 5px; }
-      .site-footer a { display: inline-block; padding: 0.7rem 0.15rem; margin: -0.7rem 0; }
+      .site-footer a { display: inline-block; padding: 0.8rem 0.15rem; margin: -0.8rem 0; }
       .site-footer { font-family: var(--mono); color: var(--muted); font-size: 0.78rem; padding-top: 1.5rem; padding-bottom: 3rem; border-top: 2px solid var(--text); margin-top: 4rem; }
       @media (prefers-reduced-motion: reduce) {
         * { animation: none !important; transition: none !important; scroll-behavior: auto !important; }
