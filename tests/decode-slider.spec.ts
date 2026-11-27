@@ -58,3 +58,37 @@ test("메뉴 링크의 누르는 영역이 44px 이상이다", async ({ page }) 
     expect(box!.height + 0.5).toBeGreaterThanOrEqual(44);
   }
 });
+
+test("첫 줄이 한 분야로 좁지 않고, 작업은 분야 태그로 거를 수 있다", async ({ page }) => {
+  await page.goto("/");
+  await expect(page.locator("h1")).toContainText("iOS·React Native 앱을");
+  await expect(page.locator("h1")).toContainText("배포와 서버까지");
+
+  const cards = page.locator(".work");
+  await expect(cards).toHaveCount(8);
+  await expect(page.locator("#work-count")).toHaveText("작업 8개");
+
+  await page.getByRole("button", { name: "인프라·배포" }).click();
+  await expect(page.getByRole("button", { name: "인프라·배포" })).toHaveAttribute("aria-pressed", "true");
+  await expect(page.locator(".work:visible")).toHaveCount(2);
+  await expect(page.locator("#web-deploy")).toBeVisible();
+  await expect(page.locator("#ci-disk")).toBeVisible();
+  await expect(page.locator("#work-count")).toHaveText("인프라·배포 작업 2개");
+
+  await page.getByRole("button", { name: "서버·SDK" }).click();
+  await expect(page.locator(".work:visible")).toHaveCount(2); // ios-sdk and sdk-flaky
+  await page.getByRole("button", { name: "AI" }).click();
+  await expect(page.locator(".work:visible")).toHaveCount(1);
+
+  await page.getByRole("button", { name: "전체" }).click();
+  await expect(page.locator(".work:visible")).toHaveCount(8);
+});
+
+test("스크립트가 없으면 작업이 모두 보이고 분야 버튼은 숨겨진다", async ({ browser }) => {
+  const context = await browser.newContext({ javaScriptEnabled: false });
+  const page = await context.newPage();
+  await page.goto("/");
+  await expect(page.locator(".work:visible")).toHaveCount(8);
+  await expect(page.locator("#work-filter")).toBeHidden();
+  await context.close();
+});
