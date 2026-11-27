@@ -4,8 +4,9 @@ import PostHog from "../components/PostHog.astro";
 interface Props {
   title: string;
   description?: string;
+  noindex?: boolean;
 }
-const { title, description = "iOS 앱을 개발부터 심사·출시·운영까지 맡아 온 모바일 엔지니어 김민준" } = Astro.props;
+const { noindex = false, title, description = "iOS 앱을 개발부터 심사·출시·운영까지 맡아 온 모바일 엔지니어 김민준" } = Astro.props;
 
 const menu = [
   { href: "/#work", label: "작업" },
@@ -13,6 +14,8 @@ const menu = [
   { href: "/writing/", label: "글" },
   { href: "/#contact", label: "연락" },
 ];
+const site = Astro.site?.href ?? "https://portfolio.minjunkim-dev.workers.dev/";
+const canonical = new URL(Astro.url.pathname, site).href;
 const here = Astro.url.pathname.replace(/\/?$/, "/");
 ---
 
@@ -24,8 +27,23 @@ const here = Astro.url.pathname.replace(/\/?$/, "/");
     <meta name="description" content={description} />
     <meta name="color-scheme" content="light dark" />
     <title>{title}</title>
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    {noindex ? <meta name="robots" content="noindex" /> : <link rel="canonical" href={canonical} />}
+    {!noindex && (
+      <>
+        <meta property="og:type" content="website" />
+        <meta property="og:locale" content="ko_KR" />
+        <meta property="og:title" content={title} />
+        <meta property="og:description" content={description} />
+        <meta property="og:url" content={canonical} />
+        <meta property="og:image" content={new URL("/og.png", site).href} />
+        <meta property="og:image:width" content="1200" />
+        <meta property="og:image:height" content="630" />
+        <meta name="twitter:card" content="summary_large_image" />
+      </>
+    )}
     <style is:global>
-      /* Ledger look: cool white page, ink rules, system monospace labels. Colour is kept for one accent (the replay mark). */
+      /* Ledger look: cool white page, ink rules, system monospace labels. Colour is kept for one accent (the demo gauge and slider). */
       :root {
         --bg: #fbfcfc;
         --surface: #ffffff;
@@ -69,10 +87,11 @@ const here = Astro.url.pathname.replace(/\/?$/, "/");
       .wrap { max-width: var(--max); margin: 0 auto; padding: 0 16px; }
       .site-nav { display: flex; flex-wrap: wrap; gap: 0.25rem 1.25rem; align-items: baseline; padding-top: 1.25rem; padding-bottom: 0.9rem; font-family: var(--mono); font-size: 0.85rem; }
       .site-nav::after { content: ""; flex-basis: 100%; border-bottom: 2px solid var(--text); margin-top: 0.65rem; }
-      .site-nav a { color: var(--muted); text-decoration: none; }
+      .site-nav a { color: var(--muted); text-decoration: none; display: inline-block; padding: 0.7rem 0.15rem; margin: -0.7rem 0; }
       .site-nav a:hover { color: var(--text); }
       .site-nav .home { font-family: inherit; font-weight: 600; color: var(--text); margin-right: auto; }
       .site-nav [aria-current="page"] { color: var(--text); text-decoration: underline; text-decoration-thickness: 2px; text-underline-offset: 5px; }
+      .site-footer a { display: inline-block; padding: 0.8rem 0.15rem; margin: -0.8rem 0; }
       .site-footer { font-family: var(--mono); color: var(--muted); font-size: 0.78rem; padding-top: 1.5rem; padding-bottom: 3rem; border-top: 2px solid var(--text); margin-top: 4rem; }
       @media (prefers-reduced-motion: reduce) {
         * { animation: none !important; transition: none !important; scroll-behavior: auto !important; }
