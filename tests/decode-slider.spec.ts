@@ -68,17 +68,22 @@ test("첫 줄이 한 분야로 좁지 않고, 작업은 분야 태그로 거를 
   await expect(cards).toHaveCount(8);
   await expect(page.locator("#work-count")).toHaveText("작업 8개");
 
+  const visibleIds = () => page.locator(".work:visible").evaluateAll((els) => els.map((e) => e.id).sort());
+
   await page.getByRole("button", { name: "인프라·배포" }).click();
   await expect(page.getByRole("button", { name: "인프라·배포" })).toHaveAttribute("aria-pressed", "true");
-  await expect(page.locator(".work:visible")).toHaveCount(2);
-  await expect(page.locator("#web-deploy")).toBeVisible();
-  await expect(page.locator("#ci-disk")).toBeVisible();
+  expect(await visibleIds()).toEqual(["ci-disk", "web-deploy"]);
   await expect(page.locator("#work-count")).toHaveText("인프라·배포 작업 2개");
 
+  await page.getByRole("button", { name: "모바일" }).click();
+  expect(await visibleIds()).toEqual(["imageio", "ios-26-4", "ios-sdk", "qr-session"]);
+
+  // ios-sdk has two tags, so it shows under both 모바일 and 서버·SDK
   await page.getByRole("button", { name: "서버·SDK" }).click();
-  await expect(page.locator(".work:visible")).toHaveCount(2); // ios-sdk and sdk-flaky
+  expect(await visibleIds()).toEqual(["ios-sdk", "sdk-flaky"]);
+
   await page.getByRole("button", { name: "AI" }).click();
-  await expect(page.locator(".work:visible")).toHaveCount(1);
+  expect(await visibleIds()).toEqual(["repo-office"]);
 
   await page.getByRole("button", { name: "전체" }).click();
   await expect(page.locator(".work:visible")).toHaveCount(8);
