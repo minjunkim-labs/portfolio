@@ -23,3 +23,13 @@ test("이미지 크기 슬라이더가 계산된 메모리를 바꾼다", async 
   await page.keyboard.press("End");
   await expect(page.locator("#decode-mem")).toHaveText("약 653MB");
 });
+
+test("PC 너비에서도 제목이 글자 하나씩 세로로 꺾이지 않는다", async ({ page }) => {
+  await page.setViewportSize({ width: 1440, height: 900 });
+  await page.goto("/");
+  const h1 = await page.locator("h1").boundingBox();
+  const phone = await page.locator(".phone").boundingBox();
+  expect(h1!.width).toBeGreaterThan(400);
+  expect(h1!.height).toBeLessThan(250);
+  expect(phone!.x).toBeGreaterThan(h1!.x + h1!.width - 1);
+});
