@@ -5,6 +5,7 @@ import Base from "../layouts/Base.astro";
 // Keep each claim's condition (period, "계산상", status) when editing.
 type Work = {
   id: string;
+  tags: string[];
   title: string;
   context: string;
   problem: string;
@@ -17,6 +18,7 @@ type Work = {
 const works: Work[] = [
   {
     id: "ios-26-4",
+    tags: ["모바일"],
     title: "iOS 26.4 업데이트 직후 멈춘 스플래시",
     context: "MyD · iOS · 2026",
     problem:
@@ -28,6 +30,7 @@ const works: Work[] = [
   },
   {
     id: "imageio",
+    tags: ["모바일"],
     title: "공지 이미지 한 장이 앱을 종료시킬 때",
     context: "MyD · iOS · 2026",
     problem:
@@ -40,6 +43,7 @@ const works: Work[] = [
   },
   {
     id: "qr-session",
+    tags: ["모바일"],
     title: "30초마다 바뀌는 QR, 끊기는 검증",
     context: "장병e음 모바일 신분증 · Android·iOS · 2025",
     problem: "QR이 30초마다 갱신될 때, 진행 중이던 검증이 끊겼습니다.",
@@ -50,6 +54,7 @@ const works: Work[] = [
   },
   {
     id: "ios-sdk",
+    tags: ["모바일", "서버·SDK"],
     title: "고객사 앱에 넣는 iOS SDK 배포 형태",
     context: "B2B 데이터 수집 SDK · iOS · 2026",
     problem:
@@ -60,7 +65,45 @@ const works: Work[] = [
       "구현은 에이전트 위주로 했습니다. 저는 sample host 3개가 같은 RC 결과물을 받아 동작하는지 검증했습니다. SDK는 Android 1.0.0과 iOS RC 단계에서 공급 계약 무산으로 고객사 전달 전 중단됐습니다.",
   },
   {
+    id: "web-deploy",
+    tags: ["인프라·배포"],
+    title: "HTTP 200은 배포 성공이 아니다",
+    context: "MyD 웹 · 배포 · 2026",
+    problem:
+      "웹 프론트 3종의 배포 성공 기준이 '업로드 작업이 끝났다'였습니다. 파일을 서버로 보낸 Job이 끝나면 성공으로 보았고, 사용자가 받는 파일은 확인하지 않았습니다.",
+    turn:
+      "HTTP 200은 CDN 캐시나 SPA 대체 응답에도 오기 때문에 기준으로 쓰지 않았습니다. 대신 공개 URL의 HTML·JS·CSS SHA-256이 빌드 산출물과 같을 때만 성공으로 판정하게 바꿨습니다. 운영 배포는 검증한 커밋에 고정하고 수동 실행만 허용합니다.",
+    result:
+      "개발 배포 Job 3개에서 수동 배포가 성공했고, 서버 파일 해시와 공개 HTML·진입 JS/CSS를 산출물 목록(manifest)과 대조했습니다. 운영은 검증 전용 실행 3회가 성공한 뒤 GitLab으로 옮기면서 적용했습니다. 분석과 구현은 대부분 AI 코딩 에이전트가 했고, 저는 작업 조건을 정하고 실제 배포 결과를 대조해 확인했습니다.",
+    link: { href: "https://minjunkim-dev.github.io/writing/web-deploy-verify-public-sha256/", label: "글 보기" },
+  },
+  {
+    id: "ci-disk",
+    tags: ["인프라·배포"],
+    title: "CI 서버 디스크 100%, 멈춘 빌드",
+    context: "사내 CI · 인프라 · 2026",
+    problem: "CI 서버 디스크가 100%가 되어 빌드가 멈췄습니다.",
+    turn:
+      "원인은 어떤 작업도 참조하지 않는 CI 볼륨과 태그 없는 이미지가 쌓인 것이었습니다. 지우지 않을 것(공유 캐시, Runner 설정, 컨테이너가 참조하는 볼륨, 태그·참조 이미지)을 정하고, 참조되지 않는 것만 정리했습니다.",
+    result:
+      "디스크 사용률이 100%에서 43%가 됐습니다. 재발을 막으려고 5분마다 도는 자동 정리기를 붙였습니다. 사용률이 높아질수록 볼륨 보존 시간을 줄이고(평상시 72시간, 75%에서 24시간, 90%에서 6시간 이상 쓰지 않은 볼륨), 한 번에 지우는 볼륨 수에 상한을 뒀습니다. 분석과 구현은 대부분 AI 코딩 에이전트가 했고, 저는 지우지 않을 조건을 정하고 실제 서버에 적용한 뒤 사용률로 확인했습니다.",
+  },
+  {
+    id: "sdk-flaky",
+    tags: ["서버·SDK"],
+    title: "2,400번 중 15번만 실패하는 테스트",
+    context: "B2B 데이터 수집 SDK · Android · 2026",
+    problem:
+      "세션 종료 기록(telemetry) 테스트가 2,400세션 중 15건(0.63%)에서 간헐적으로 실패했습니다.",
+    turn:
+      "원인은 제품 코드의 실행 순서 경합이었습니다. 잠금 안에서 종료 이벤트를 먼저 내보내고, 잠금이 풀린 뒤에 audit 기록을 남기고 있었습니다. 세션마다 audit 기록이 끝날 때까지 종료 이벤트 발행을 붙잡도록 고쳤습니다. 원인을 찾고 고친 것은 AI 코딩 에이전트입니다.",
+    result:
+      "2,400건에서 실패가 0건이 됐고, Android 테스트 묶음이 25회 연속 통과했습니다. 수정을 되돌리면 새 검사가 매번 실패하는 것도 확인했습니다. 저는 이 결과를 검증했습니다.",
+    note: "수정은 Android(Kotlin)만이고 출시 전 테스트 기준입니다. SDK는 고객사 전달 전에 중단됐습니다.",
+  },
+  {
     id: "repo-office",
+    tags: ["AI"],
     title: "이슈 하나를, 리뷰까지 끝난 PR로",
     context: "repo-office · 개인 프로젝트 · 2026",
     problem:
@@ -74,14 +117,15 @@ const works: Work[] = [
   },
 ];
 
+const tags = ["모바일", "서버·SDK", "인프라·배포", "AI"];
 ---
 
-<Base title="김민준 · iOS 엔지니어">
+<Base title="김민준 · 엔지니어">
   <header class="hero wrap">
     <div class="intro">
-      <p class="label">김민준 · iOS 엔지니어</p>
-      <h1>iOS 앱을 개발부터 <span class="nb">심사·출시·운영까지</span> 맡아 온 모바일 엔지니어입니다.</h1>
-      <p class="lead">OS가 업데이트되면 실제 기기에서 앱을 다시 점검합니다. iOS 26.4 업데이트 직후의 스플래시 정지도 이 점검에서 발견했습니다.</p>
+      <p class="label">김민준 · 엔지니어</p>
+      <h1>iOS·React Native 앱을 <span class="nb">출시·운영하고,</span> 그 배포와 서버까지 다뤄 온 엔지니어입니다.</h1>
+      <p class="lead">최근 작업을 모았습니다. 관심 있는 분야로 거를 수 있습니다.</p>
     </div>
     <figure class="replay">
       <div class="phone">
@@ -99,7 +143,7 @@ const works: Work[] = [
           </label>
         </div>
       </div>
-      <figcaption class="label">아래 두 번째 사례(공지 이미지)에서 화면에 펼칠 때 필요한 메모리의 계산값입니다. 슬라이더를 왼쪽으로 끌어 보세요. 실제 사용량은 다시 재지 않았습니다.</figcaption>
+      <figcaption class="label">공지 이미지 사례에서 화면에 펼칠 때 필요한 메모리의 계산값입니다. 슬라이더를 왼쪽으로 끌어 보세요. 실제 사용량은 다시 재지 않았습니다.</figcaption>
     </figure>
     <ul class="facts">
       <li><strong>4년 4개월</strong><span>개인 데이터 플랫폼 MyD를 비롯한 앱 개발·운영 (2022.06–2026.10)</span></li>
@@ -111,8 +155,15 @@ const works: Work[] = [
   <main>
     <section id="work" class="wrap" aria-labelledby="work-title">
       <h2 id="work-title">작업</h2>
+      <div class="filter" id="work-filter" hidden>
+        <div class="chips" role="group" aria-label="분야로 거르기">
+          <button type="button" data-tag="전체" aria-pressed="true">전체</button>
+          {tags.map((t) => <button type="button" data-tag={t} aria-pressed="false">{t}</button>)}
+        </div>
+        <p class="count mono" id="work-count" aria-live="polite"></p>
+      </div>
       {works.map((w) => (
-        <article class="work" id={w.id} aria-labelledby={`${w.id}-title`}>
+        <article class="work" id={w.id} data-tags={w.tags.join("|")} aria-labelledby={`${w.id}-title`}>
           <ul class="context label" aria-label="맥락">
             {w.context.split(" · ").map((c) => <li>{c}</li>)}
           </ul>
@@ -160,6 +211,27 @@ const works: Work[] = [
     link.focus();
   });
 
+  // Work filter: without script every work stays visible and the chips stay hidden.
+  const filter = document.getElementById("work-filter");
+  if (filter) {
+    const chips = [...filter.querySelectorAll<HTMLButtonElement>("button[data-tag]")];
+    const cards = [...document.querySelectorAll<HTMLElement>(".work")];
+    const count = document.getElementById("work-count")!;
+    const apply = (tag: string) => {
+      let shown = 0;
+      for (const card of cards) {
+        const match = tag === "전체" || (card.dataset.tags ?? "").split("|").includes(tag);
+        card.hidden = !match;
+        if (match) shown += 1;
+      }
+      for (const chip of chips) chip.setAttribute("aria-pressed", String(chip.dataset.tag === tag));
+      count.textContent = tag === "전체" ? `작업 ${shown}개` : `${tag} 작업 ${shown}개`;
+    };
+    for (const chip of chips) chip.addEventListener("click", () => apply(chip.dataset.tag!));
+    filter.hidden = false;
+    apply("전체");
+  }
+
   // Memory for a decoded RGBA bitmap is width x height x 4 bytes. 9432x17328 comes from the case below.
   const slider = document.getElementById("decode-size") as HTMLInputElement | null;
   if (slider) {
@@ -206,6 +278,13 @@ const works: Work[] = [
   .facts li { border-bottom: 1px solid var(--line); padding: 0.8rem 1rem 0.8rem 0; display: grid; gap: 0.15rem; align-content: start; }
   .facts strong { font-family: var(--mono); font-weight: 500; font-size: 1.35rem; font-variant-numeric: tabular-nums; word-spacing: -0.2em; }
   .facts span { color: var(--muted); font-size: 0.86rem; line-height: 1.5; }
+  .filter { display: flex; flex-wrap: wrap; align-items: center; gap: 0.6rem 1rem; margin: 0.8rem 0 1.1rem; }
+  .filter[hidden] { display: none; }
+  .chips { display: flex; flex-wrap: wrap; gap: 0.5rem; }
+  .chips button { font: inherit; font-size: 0.85rem; color: var(--text); background: transparent; border: 1px solid var(--line); border-radius: 999px; padding: 0.55rem 0.95rem; min-height: 2.75rem; cursor: pointer; }
+  .chips button[aria-pressed="true"] { color: var(--bg); background: var(--text); border-color: var(--text); }
+  .count { margin: 0; font-size: 0.8rem; color: var(--muted); }
+  .work[hidden] { display: none; }
   h2 { font-size: 1.4rem; margin: 0 0 0.4rem; }
   .work { display: grid; grid-template-columns: 9rem minmax(0, 1fr); gap: 1.5rem; padding: 1.5rem 0 2rem; border-top: 2px solid var(--text); }
   .context { list-style: none; margin: 0; padding: 0.3rem 0 0; display: grid; gap: 0.25rem; align-content: start; }
